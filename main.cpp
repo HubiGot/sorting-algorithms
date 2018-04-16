@@ -1,5 +1,6 @@
 #include<iostream>
 #include<cstdlib>
+#include<cmath>
 #include<vector>
 #include<algorithm>
 
@@ -11,6 +12,7 @@ using namespace std;
 
 //quicksort (sortowanie szybkie)
 //dzielenie tablicy na dwie czesci: w lewej elementy mniejsze od pivota (x) w prewej wieksze
+//wybieranie skrajnego elementu tablicy jako pivot
 int partition(int tablica[],int l, int p)
 {
 int x=tablica[l]; //obieram pivot
@@ -47,10 +49,9 @@ void quicksort(int tablica[],int l, int p)
 }
 
 
-
+//------------------------------------------------------------------------------
+//sortowanie przez scalanie (mergesort)
 int *pom;
-
-
 void merge(int tablica[], int l, int srodek, int p)
 {
 	int i = l, j = srodek + 1;
@@ -91,6 +92,50 @@ void mergesort(int tablica[],int l, int p)
   merge(tablica, l, srodek, p); // scalanie podtablic
   }
 }
+//------------------------------------------------------------------------------
+//sortowanie przez kopcowanie (HeapSort)
+//heapify - przywraca strukture kopca (warunek kopca)
+void heapify(int *tab,int rozmiar,int index)
+{
+int largest=0, temp;
+int lewy=(index +1)*2-1;
+int prawy=(index+1)*2;
+if(lewy<rozmiar && tab[lewy]>tab[index]) //porownuje element index z lewym elementem -> ustawiam wiekszy z nich
+  {
+    largest=lewy;
+  }
+  else largest=index;
+  if(prawy<rozmiar && tab[prawy]>tab[largest]) //pozniej prawy porownuje z wiekszym z nich
+    {
+      largest=prawy;
+    }
+  if(largest!=index)  //jesli najwiekszym elementem nie jest index to zamieniam je miejscami
+    {
+      temp=tab[index];
+      tab[index]=tab[largest];
+      tab[largest]=temp;
+      heapify(tab,rozmiar,largest);  //sprawdzam warunek kopca nizej
+    }
+}
+
+void heapsort(int * tab, int rozmiar)
+{
+  int K_rozmiar=rozmiar;
+
+  for(int p=(K_rozmiar-1)/2; p>=0; --p)
+    {
+      heapify(tab, K_rozmiar, p);
+    }
+  for(int i=rozmiar-1; i>0; --i)
+    {
+      int temp=tab[i];
+      tab[i]=tab[0];   //przerzucenie korzenia do posortowanej czesci tablicy
+      tab[0]=temp;      //przerzucanie ostatniego elementu do korzenia
+      --K_rozmiar;
+      heapify(tab,K_rozmiar,0);
+    }
+}
+
 
 
 
@@ -109,7 +154,7 @@ int main()
 		cin>>tab[i];
 
 	//sortowanie wczytanej tablicy
-	mergesort(tab,0,n-1);
+	heapsort(tab,n);
 
 	//wypisanie wyników
 	for(int i=0;i<n;i++)
