@@ -6,14 +6,84 @@
 
 using namespace std;
 
+//deklaracje funkcji
+void insertionsort(int *tab, int rozmiar);
+void IntroSort(int *tab, int rozmiar, int M);
+void heapsort(int * tab, int rozmiar);
+void heapify(int *tab,int rozmiar,int index);
+void MedianOfThree(int *tab, int &l, int &p);
+int partition(int *tab, int l, int p);
+void IntrospectiveSort(int *tab,int N);
+void quicksort(int tablica[],int l, int p);
+void merge(int tablica[], int l, int srodek, int p);
+void mergesort(int tablica[],int l, int p);
+int partition_quick(int tablica[],int l, int p);
+
+//------------------------------------------------------------------------------
+
+//Mediana z 3
+void MedianOfThree(int *tab, int &l, int &p)
+{
+  if(tab[++l-1]>tab[--p])
+    swap(tab[l-1],tab[p]);
+  if(tab[l-1]>tab[p/2])
+    swap(tab[l-1],tab[p/2]);
+  if(tab[p/2]>tab[p])
+    swap(tab[p/2],tab[p]);
+  swap(tab[p/2],tab[p-1]);
+}
+
+// element osiowy (rozbudowany dla sortowania introspektywnego)
+int partition(int *tab, int l, int p)
+{
+  int i,j;
+  if(p>=3)
+    MedianOfThree(tab,l,p);
+  for(i=l,j=p-2; ;)
+    {
+      for( ;tab[i]<tab[p-1]; ++i);
+      for( ;j>=l &&tab[j]>tab[p-1]; --j);
+      if(i<j)
+        swap(tab[i++],tab[j--]);
+      else break;
+    }
+    swap(tab[i],tab[p-1]);
+    return i;
+}
+
+
+// sortowanie introspektywne (hybrydowe)
+void IntrospectiveSort(int *tab,int N)
+{
+  IntroSort(tab,N,floor(2*log(N)/M_LN2));
+  insertionsort(tab,N);
+}
 
 
 
+void IntroSort(int *tab, int rozmiar, int M)
+{
+  int i;
+  if(M<=0)
+  {
+    heapsort(tab,rozmiar);
+    return;
+  }
+  i=partition(tab,0,rozmiar);
+  if(i>9)
+    IntroSort(tab,i,M-1);
+  if(rozmiar-1-i>9)
+    IntroSort(tab+i+1,rozmiar-1-i,M-1);
+}
 
-//quicksort (sortowanie szybkie)
+
+//------------------------------------------------------------------------------
+
+
 //dzielenie tablicy na dwie czesci: w lewej elementy mniejsze od pivota (x) w prewej wieksze
 //wybieranie skrajnego elementu tablicy jako pivot
-int partition(int tablica[],int l, int p)
+//wersja podstawowa dla quicksorta
+int partition_quick(int tablica[],int l, int p)
 {
 int x=tablica[l]; //obieram pivot
 int i = l;        //indeks poczatkowy w tabeli
@@ -36,13 +106,13 @@ while(1)
   }
 
 }
-
+//quicksort (sortowanie szybkie)
 void quicksort(int tablica[],int l, int p)
 {
   int d;
   if(l<p)
     {
-    d=partition(tablica,l,p); //punkt podzialu tablicy na dwie czesci
+    d=partition_quick(tablica,l,p); //punkt podzialu tablicy na dwie czesci
     quicksort(tablica,l,d); //rekurencyjne wywolanie dla lewej czesci tablicy
     quicksort(tablica,d+1,p); //rekurencyjne wywolanie dla prawej czesci tablicy
     }
@@ -122,7 +192,7 @@ void heapsort(int * tab, int rozmiar)
 {
   int K_rozmiar=rozmiar;
 
-  for(int p=(K_rozmiar-1)/2; p>=0; --p)
+  for(int p=(K_rozmiar-1)/2; p>=0; --p) //tworzenie kopca
     {
       heapify(tab, K_rozmiar, p);
     }
@@ -135,7 +205,22 @@ void heapsort(int * tab, int rozmiar)
       heapify(tab,K_rozmiar,0);
     }
 }
-
+//------------------------------------------------------------------------------
+//sortowanie przez wstawianie (insertion sort)
+void insertionsort(int *tab, int rozmiar)
+{
+  int i,j;
+  int temp;
+  for(i=1; i<rozmiar; i++)
+    {
+      temp=tab[i];
+      for(j=i; j>0 && temp<tab[j-1]; --j) //szukam miejsca dla elementu
+        {
+          tab[j]=tab[j-1];    //przesuwam elementy
+        }
+      tab[j]=temp;    //gdy znalazlem miejsce dla elementu to go wstawiam
+    }
+}
 
 
 
@@ -154,7 +239,9 @@ int main()
 		cin>>tab[i];
 
 	//sortowanie wczytanej tablicy
-	heapsort(tab,n);
+	IntrospectiveSort(tab,n);
+  //quicksort(tab,0,n-1);
+  //mergesort(tab,0,n-1);
 
 	//wypisanie wyników
 	for(int i=0;i<n;i++)
