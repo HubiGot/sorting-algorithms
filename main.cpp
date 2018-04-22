@@ -1,12 +1,16 @@
 #include<iostream>
 #include<cstdlib>
 #include<cmath>
+#include<cstdio>
 #include<vector>
 #include<algorithm>
+#include<iomanip>
+#include"szablon.hh"
 
 using namespace std;
 
 //deklaracje funkcji
+
 void insertionsort(int *tab, int rozmiar);
 void IntroSort(int *tab, int rozmiar, int M);
 void heapsort(int * tab, int rozmiar);
@@ -223,30 +227,49 @@ void insertionsort(int *tab, int rozmiar)
 }
 
 
-
-
 int main()
 {
-	int *tab,
-	n; //liczba elementów tablicy
-  cout<<"Podaj liczbe elementow do posortowania "<<endl;
-	cin>>n;
-	tab = new int[n]; //przydzielenie pamięci na tablicę liczb
-	pom = new int[n]; //przydzielenie pamięci na tablicę pomocniczą
-  cout<<"Podaj wartosci elementow: "<<endl;
-	//wczytanie elementów tablicy
-	for(int i=0;i<n;i++)
-		cin>>tab[i];
+  clock_t begin,end;
+  double t1=0.0,t2=0.0;
+  tablica_int <100000> nowa[20];
+  srand(time(NULL)); //zapewnia losowosc liczb w tablicach
+int n[20];
+for(int i=0;i<20;i++) //inicjalizajca tablic elementami
+  {
+    nowa[i].uzupelnij();
+    n[i]=nowa[i].rozmiar();
+  }
 
-	//sortowanie wczytanej tablicy
-	IntrospectiveSort(tab,n);
-  //quicksort(tab,0,n-1);
-  //mergesort(tab,0,n-1);
 
-	//wypisanie wyników
-	for(int i=0;i<n;i++)
-		cout<<tab[i]<<" ";
+  for(int i=0;i<20;i++)
+    {
+      pom = new int[n[i]]; //przydzielenie pamieci na tablice pomocnicza dla mergesort
+    }                       //wyciagniete w osobna petle zeby pomiary zlozonosci byly wiarygodne
 
+
+begin=clock();
+for(int i=0;i<20;i++) // sortowanie
+  {
+    //IntrospectiveSort(nowa[i].tablica,n[i]);
+    //quicksort(nowa[i].tablica,0,n[i]-1);
+    mergesort(nowa[i].tablica,0,n[i]-1);
+  }
+end=clock();
+
+t1 +=(double)(end-begin)/CLOCKS_PER_SEC;
+cout<<"Czas "<<t1/20<<cout<<endl;
+//printf("%10f",t1/20);cout<<endl;
+
+  for(int i=0;i<20;i++) //sprawdzenie czy tablice sa posortowane
+    {
+      nowa[i].czy_posortowana();
+      cout<<"Tablica "<<i<<" posortowana :)"<<endl;
+    }
+    /*for(int i=0;i<20;i++) //wyswietlanie elementow
+      {
+      nowa[i].pokaz();cout<<endl;
+    }*/
 
 	return 0;
+
 }
