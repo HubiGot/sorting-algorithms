@@ -231,36 +231,36 @@ int main()
 {
   clock_t begin,end;
   double t1=0.0,t2=0.0;
-  tablica_int <100000> nowa[20];
+  tablica_int <20000> nowa[100];
   srand(time(NULL)); //zapewnia losowosc liczb w tablicach
-int n[20];
-for(int i=0;i<20;i++) //inicjalizajca tablic elementami
+int n[100];
+for(int i=0;i<100;i++) //inicjalizajca tablic elementami
   {
     nowa[i].uzupelnij();
     n[i]=nowa[i].rozmiar();
   }
 
 
-  for(int i=0;i<20;i++)
+  for(int i=0;i<100;i++)
     {
       pom = new int[n[i]]; //przydzielenie pamieci na tablice pomocnicza dla mergesort
     }                       //wyciagniete w osobna petle zeby pomiary zlozonosci byly wiarygodne
 
 
 begin=clock();
-for(int i=0;i<20;i++) // sortowanie
+for(int i=0;i<100;i++) // sortowanie
   {
+    quicksort(nowa[i].tablica,0,n[i]-1);
+    //mergesort(nowa[i].tablica,0,n[i]-1);
     //IntrospectiveSort(nowa[i].tablica,n[i]);
-    //quicksort(nowa[i].tablica,0,n[i]-1);
-    mergesort(nowa[i].tablica,0,n[i]-1);
   }
 end=clock();
 
 t1 +=(double)(end-begin)/CLOCKS_PER_SEC;
-cout<<"Czas "<<t1/20<<cout<<endl;
-//printf("%10f",t1/20);cout<<endl;
+cout<<"Czas "<<t1/100<<cout<<endl;
+printf("%10f",t1/100);cout<<endl;
 
-  for(int i=0;i<20;i++) //sprawdzenie czy tablice sa posortowane
+  for(int i=0;i<100;i++) //sprawdzenie czy tablice sa posortowane
     {
       nowa[i].czy_posortowana();
       cout<<"Tablica "<<i<<" posortowana :)"<<endl;
