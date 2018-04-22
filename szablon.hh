@@ -11,7 +11,7 @@
 
 using namespace std;
 
-
+//szablon do tworzenia tablic
 template < int ilosc>
 class tablica_int
 {
@@ -19,9 +19,9 @@ class tablica_int
     int tablica[ilosc];
 
 
-//tablica_int();
-//~tablica_int();
+
 //------------------------------------------------------------------------------
+//funkcja inicjujaca tablice liczbami losowymi
     void uzupelnij()
     {
       for(int i=0; i<ilosc; i++)
@@ -30,6 +30,7 @@ class tablica_int
         }
     }
 //------------------------------------------------------------------------------
+//funkcja wyswietlajaca tablice
     void pokaz()
     {
       for(int i=0; i<ilosc; i++)
@@ -38,21 +39,25 @@ class tablica_int
         }
     }
 //------------------------------------------------------------------------------
+//funkcja przygotowywujaca tablice do sortowanie (tablice posortowane w jakimś %)
     void sortuj(int koniec)
     {
       sort(tablica, tablica+koniec);
     }
 //------------------------------------------------------------------------------
+//funkcja sortujaca tablice malejaco
   void sortuj_malejaco()
     {
       sort(tablica,tablica+ilosc, greater<int>());
     }
 //------------------------------------------------------------------------------
+//funkcja zwracajac rozmiar tablicy
   int rozmiar()
     {
       return ilosc;
     }
 //------------------------------------------------------------------------------
+//funkcja sprawdzajaca czy tablica jest posortowana
 bool czy_posortowana()
   {
     int licznik=0;

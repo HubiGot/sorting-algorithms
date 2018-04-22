@@ -10,17 +10,16 @@
 using namespace std;
 
 //deklaracje funkcji
-
-void insertionsort(int *tab, int rozmiar);
+void insertionsort(int *tab, int rozmiar); //sortowanie przez wstawianie
 void IntroSort(int *tab, int rozmiar, int M);
-void heapsort(int * tab, int rozmiar);
+void heapsort(int * tab, int rozmiar);     //sortowanie przez kopcowanie
 void heapify(int *tab,int rozmiar,int index);
 void MedianOfThree(int *tab, int &l, int &p);
 int partition(int *tab, int l, int p);
-void IntrospectiveSort(int *tab,int N);
-void quicksort(int tablica[],int l, int p);
+void IntrospectiveSort(int *tab,int N);   //sortowanie introspektywne
+void quicksort(int tablica[],int l, int p); //sortowanie szybkie
 void merge(int tablica[], int l, int srodek, int p);
-void mergesort(int tablica[],int l, int p);
+void mergesort(int tablica[],int l, int p); //sortowanie przez scalanie
 int partition_quick(int tablica[],int l, int p);
 
 //------------------------------------------------------------------------------
@@ -230,25 +229,29 @@ void insertionsort(int *tab, int rozmiar)
 int main()
 {
   clock_t begin,end;
-  double t1=0.0,t2=0.0;
-  tablica_int <20000> nowa[100];
+  double t1=0.0;
+  tablica_int <100000> nowa[20];
   srand(time(NULL)); //zapewnia losowosc liczb w tablicach
-int n[100];
-for(int i=0;i<100;i++) //inicjalizajca tablic elementami
+int n[20];
+for(int i=0;i<20;i++) //inicjalizajca tablic elementami
   {
     nowa[i].uzupelnij();
     n[i]=nowa[i].rozmiar();
   }
 
-
-  for(int i=0;i<100;i++)
+  for(int i=0;i<20;i++) //czesciowe sortowanie do testow
     {
-      pom = new int[n[i]]; //przydzielenie pamieci na tablice pomocnicza dla mergesort
-    }                       //wyciagniete w osobna petle zeby pomiary zlozonosci byly wiarygodne
+      nowa[i].sortuj_malejaco();
+    }
+
+
+
+      pom = new int[n[0]]; //przydzielenie pamieci na tablice pomocnicza dla mergesort
+
 
 
 begin=clock();
-for(int i=0;i<100;i++) // sortowanie
+for(int i=0;i<20;i++) // sortowanie 20 tablic
   {
     quicksort(nowa[i].tablica,0,n[i]-1);
     //mergesort(nowa[i].tablica,0,n[i]-1);
@@ -256,14 +259,16 @@ for(int i=0;i<100;i++) // sortowanie
   }
 end=clock();
 
-t1 +=(double)(end-begin)/CLOCKS_PER_SEC;
-cout<<"Czas "<<t1/100<<cout<<endl;
-printf("%10f",t1/100);cout<<endl;
+t1 +=(double)(end-begin)/CLOCKS_PER_SEC; //sredni czas potrzebny na posortowanie jednej tablicy 
+cout<<"Czas "<<t1/20<<cout<<endl;
+printf("%10f",t1/20);cout<<endl;
 
-  for(int i=0;i<100;i++) //sprawdzenie czy tablice sa posortowane
+  for(int i=0;i<20;i++) //sprawdzenie czy tablice sa posortowane
     {
-      nowa[i].czy_posortowana();
+      if(nowa[i].czy_posortowana())
+      {
       cout<<"Tablica "<<i<<" posortowana :)"<<endl;
+      }
     }
     /*for(int i=0;i<20;i++) //wyswietlanie elementow
       {
